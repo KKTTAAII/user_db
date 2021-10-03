@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from types import MethodDescriptorType
-from flask import Flask, request, render_template,  redirect, flash, session
+from flask import Flask, request, render_template,  redirect, flash, url_for
 from models import db, connect_db, User
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -50,13 +50,13 @@ def show_user(user_id):
 @app.route("/user/<int:user_id>/edit")
 def edit_user(user_id):
     """Show edit page"""
-    userid = user_id
-    return render_template("edit.html", userid = userid)
+    user = User.query.get_or_404(user_id)
+    return render_template("edit.html", user = user)
 
 @app.route("/user/<int:user_id>/edit", methods=["POST"])
 def update_user(user_id):
     """Update user info"""
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
     first = request.form["first_name"]
     last = request.form["last_name"]
     img = request.form["img_url"]
@@ -64,13 +64,13 @@ def update_user(user_id):
     user.first_name = first
     user.last_name = last
     user.image_url = img
-    
-    db.session.add()
+
+    db.session.add(user)
     db.session.commit()
 
-    return redirect(f"/user/{user.id}")
+    return redirect("/")
 
-@app.route("/user/<int:user_id>/delete")
+@app.route("/user/<int:user_id>/delete", methods=["POST"])
 def delete_user(user_id):
     """Delete user"""
     User.query.filter_by(id=user_id).delete()

@@ -1,6 +1,7 @@
 {% extends 'base.html' %} 
 {%block title%}New User Form{%endblock%} 
 {% block content%}
+<div class="ml mt">
 <h1>Create a user</h1>
 <form action="/users/new" method="POST">
     <label for="first_name">First Name:</label>
@@ -15,6 +16,7 @@
     <br>
     <input type="text" name="img_url" placeholder="Provide image of the user">
     <br>
-    <button>Add</button>
+    <button class="button btn btn-primary">Add</button>
 </form>
+</div>
 {% endblock %}
