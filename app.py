@@ -2,7 +2,7 @@
 
 from types import MethodDescriptorType
 from flask import Flask, request, render_template,  redirect, flash, url_for
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
