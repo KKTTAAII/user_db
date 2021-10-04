@@ -20,7 +20,7 @@ db.create_all()
 @app.route('/')
 def list_users():
     """Shows list of all users in db"""
-    users = User.query.all()
+    users = User.query.order_by(User.first_name, User.last_name).all()
     return render_template('home.html', users=users)
 
 @app.route('/newform')

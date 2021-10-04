@@ -7,7 +7,7 @@
         <img src="{{user.image_url}}" alt="User's picture" height="200px" width="200px">
     </div>
     <div>
-        <h1>{{user.first_name}} {{user.last_name}}</h1>
+        <h1>{{user.get_full_name}}</h1>
     </div>
     <div>
         <form action="/user/{{user.id}}/edit">
