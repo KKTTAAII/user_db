@@ -5,15 +5,14 @@ import datetime
 
 db = SQLAlchemy()
 
+
 def connect_db(app):
     db.app = app
     db.init_app(app)
 
-DEFAULT_IMAGE_URL = ('https://scontent.fbkk5-5.fna.fbcdn.net/v/'
-'t31.18172-8/20746116_10154702359061231_1407828309154541812_o.jpg?_'
-'nc_cat=104&ccb=1-5&_nc_sid=84a396&_nc_ohc=PEj5I9cBUqoAX9ofBUP&_nc_oc'
-'=AQlYbIf3oF-fc7fimrwcM_Cl6QI-8JTmHGLxWqk8QwJeFViIR0AJ8-A-uYKW8fM-s8'
-'4&_nc_ht=scontent.fbkk5-5.fna&oh=47495007826807b8310ae1611e52db77&oe=618171B7')
+
+DEFAULT_IMAGE_URL = 'https://www.icon0.com/vectors/static2/preview2/stock-photo-people-face-cartoon-icon-design-15029.jpg'
+
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -23,24 +22,25 @@ class User(db.Model):
                    autoincrement=True)
 
     first_name = db.Column(db.TEXT,
-                            nullable=False
-                            )
-            
+                           nullable=False
+                           )
+
     last_name = db.Column(db.TEXT,
-                            nullable=False)
+                          nullable=False)
 
     image_url = db.Column(db.TEXT,
-                            nullable=False,
-                            default=DEFAULT_IMAGE_URL)
-    
+                          nullable=False,
+                          default=DEFAULT_IMAGE_URL)
+
     def __repr__(self):
         user = self
         return f"<User id={user.id} first_name={user.first_name} last_name={user.last_name} image_url={user.image_url}>"
 
-    @property                       
+    @property
     def get_full_name(self):
         user = self
         return f"{user.first_name} {user.last_name}"
+
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -50,16 +50,18 @@ class Post(db.Model):
                    autoincrement=True)
 
     title = db.Column(db.TEXT,
-                            nullable=False
-                            )
-                
+                      nullable=False
+                      )
+
     content = db.Column(db.TEXT,
-                            nullable=False
-                            )
+                        nullable=False
+                        )
 
-    created_at = db.Column(db.DATETIME, default=datetime.datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    userid = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    user = db.relationship('User', backref='posts')
 
     def __repr__(self):
-        return f"<Post {self.title} {self.content} {self.created_at} {self.user_id}>"
+        return f"<Post {self.title} {self.content} {self.created_at} {self.userid}>"

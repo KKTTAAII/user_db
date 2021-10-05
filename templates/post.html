@@ -1,0 +1,23 @@
+{% extends 'base.html' %} 
+{%block title%}{{post.title}}{%endblock%} 
+{% block content%}
+<div class="container">
+<div class="mt-5">
+    <h1>{{post.title}}</h1>
+    <p>{{post.content}}</p>
+    <span><i>Created By {{post.user.get_full_name}}</i></span>
+    <br>
+</div>
+<div class="btn-group mt-5">
+    <form action="/">
+        <input type="submit" name="cancel_button" value="Cancel" class="btn btn-outline-secondary button"/>
+    </form>
+    <form action="/post/{{post.id}}/edit">
+        <input type="submit" name="edit_button" value="Edit" class="btn btn-outline-warning button" />
+    </form>
+    <form action="/post/{{post.id}}/delete" method="POST">
+        <input type="submit" name="delete_button" value="Delete" class="btn btn-outline-danger button"/>
+    </form>
+</div>
+</div>
+{% endblock %}

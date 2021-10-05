@@ -1,26 +1,35 @@
-{% extends 'base.html' %} 
-{%block title%}Edit user{%endblock%} 
-{% block content%}
-<div class="ml mt">
-<h1>Edit a user</h1>
-<form method="POST">
+{% extends 'base.html' %} {%block title%}Edit user{%endblock%} {% block
+content%}
+<div class="container">
+  <h1>Edit user</h1>
+  <form method="POST">
     <label for="first_name">First Name:</label>
-    <br>
-    <input type="text" name="first_name" value="{{user.first_name}}">
-    <br>
+    <br />
+    <input type="text" name="first_name" value="{{user.first_name}}" />
+    <br />
     <label for="last_name">Last Name:</label>
-    <br>
-    <input type="text" name="last_name" value="{{user.last_name}}">
-    <br>
+    <br />
+    <input type="text" name="last_name" value="{{user.last_name}}" />
+    <br />
     <label for="img_url">Image URL:</label>
-    <br>
-    <input type="text" name="img_url" value="{{user.image_url}}">
-    <br>
-    <input type="submit" name="save_button" value="Save"  class="btn btn-outline-success button"/>
-</form>
+    <br />
+    <input type="text" name="img_url" value="{{user.image_url}}" />
+    <br />
+    <input
+      type="submit"
+      name="save_button"
+      value="Save"
+      class="btn btn-outline-success button"
+    />
+  </form>
 
-<form action="/user/{{user.id}}">
-    <input type="submit" name="cancel_button" value="Cancel" class="btn btn-outline-secondary button"/>
-</form>
+  <form action="/user/{{user.id}}">
+    <input
+      type="submit"
+      name="cancel_button"
+      value="Cancel"
+      class="btn btn-outline-secondary button"
+    />
+  </form>
 </div>
 {% endblock %}
