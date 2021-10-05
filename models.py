@@ -32,6 +32,8 @@ class User(db.Model):
                           nullable=False,
                           default=DEFAULT_IMAGE_URL)
 
+    posts = db.relationship("Post", backref="users", cascade="all, delete-orphan")
+
     def __repr__(self):
         user = self
         return f"<User id={user.id} first_name={user.first_name} last_name={user.last_name} image_url={user.image_url}>"
