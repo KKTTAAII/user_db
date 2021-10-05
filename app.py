@@ -145,3 +145,9 @@ def update_post(post_id):
     db.session.commit()
 
     return redirect(f"/post/{post_id}")
+
+@app.route("/homepage")
+def show_homepage():
+    """Show homepage"""
+    all_posts = Post.query.order_by('created_at').limit(5)
+    return render_template("homepage.html", all_posts=all_posts)
