@@ -78,7 +78,8 @@ def update_user(user_id):
 @app.route("/user/<int:user_id>/delete", methods=["POST"])
 def delete_user(user_id):
     """Delete user"""
-    User.query.filter_by(id=user_id).delete()
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
     db.session.commit()
     flash("The user has been deleted")
     return redirect("/")

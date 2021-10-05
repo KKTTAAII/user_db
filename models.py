@@ -13,7 +13,6 @@ def connect_db(app):
 
 DEFAULT_IMAGE_URL = 'https://www.icon0.com/vectors/static2/preview2/stock-photo-people-face-cartoon-icon-design-15029.jpg'
 
-
 class User(db.Model):
     __tablename__ = 'users'
 
@@ -32,7 +31,7 @@ class User(db.Model):
                           nullable=False,
                           default=DEFAULT_IMAGE_URL)
 
-    posts = db.relationship("Post", backref="users", cascade="all, delete-orphan")
+    posts = db.relationship("Post", backref="user", cascade="all, delete-orphan")
 
     def __repr__(self):
         user = self
@@ -62,8 +61,6 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     userid = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
-    user = db.relationship('User', backref="posts")
 
     def __repr__(self):
         return f"<Post {self.title} {self.content} {self.created_at} {self.userid}>"
