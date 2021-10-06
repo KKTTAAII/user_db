@@ -62,5 +62,36 @@ class Post(db.Model):
 
     userid = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
+    post_tags = db.relationship("PostTag", backref="post", cascade="all, delete-orphan")
+
     def __repr__(self):
         return f"<Post {self.title} {self.content} {self.created_at} {self.userid}>"
+
+class Tag(db.Model):
+    __tablename__ = 'tags'
+
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+
+    name = db.Column(db.TEXT,
+                      nullable=False,
+                      unique = True
+                      )
+
+    posts = db.relationship('Post', secondary="post_tags", backref="tags")
+
+    def __repr__(self):
+        return f"<Tag {self.name}>"
+
+class PostTag(db.Model):
+    __tablename__ = 'post_tags'
+
+    post_id = db.Column(db.Integer, db.ForeignKey(
+        'posts.id'), primary_key=True)
+
+    tag_id = db.Column(db.Integer, db.ForeignKey(
+        'tags.id'), primary_key=True)
+
+
+
