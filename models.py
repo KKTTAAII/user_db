@@ -93,5 +93,6 @@ class PostTag(db.Model):
     tag_id = db.Column(db.Integer, db.ForeignKey(
         'tags.id'), primary_key=True)
 
-
+    def __repr__(self):
+        return f"<PostTag {self.post_id}, {self.tag_id}>"
 

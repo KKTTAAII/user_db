@@ -12,12 +12,19 @@
         <br />
         <textarea type="text" name="content" rows="5" cols="50" >{{post.content}}</textarea>
         <br />
+
       <div>
         {%for tag in all_tags%}
+        {%if tag in post.tags %}
+        <input type="checkbox" name="tag_name" value="{{tag.name}}" checked>{{tag.name}}
+        <br>
+        {%else%}
         <input type="checkbox" name="tag_name" value="{{tag.name}}">{{tag.name}}
         <br>
+        {%endif%}
         {%endfor%}
       </div>
+
       <input type="submit" name="save_button" value="Save"  class="btn btn-outline-success button"/>
       </form>
     

@@ -125,7 +125,6 @@ def add_post(user_id):
 
     return redirect(f"/user/{user_id}")
 
-
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
     """Show post per post id"""
@@ -139,7 +138,6 @@ def edit_post(post_id):
     all_tags = Tag.query.all()
     return render_template("editpost.html", post=post, all_tags=all_tags)
 
-
 @app.route("/post/<int:post_id>/edit", methods=["POST"])
 def update_post(post_id):
     """Update post info"""
@@ -152,6 +150,21 @@ def update_post(post_id):
     db.session.add(post)
     db.session.commit()
 
+    tag_names = request.form.getlist("tag_name")
+
+    for name in tag_names:
+        print(f"THESE ARE names *********************{name}")
+        tag = Tag.query.filter_by(name=name).first()
+        print(f"########################{tag}")
+        tag_id = tag.id
+        print(f"###########0000000000000000{tag_id}")
+        db.session.query(PostTag).filter(PostTag.post_id==post_id).delete()
+        db.session.commit()
+        print(f"###########0000000000000000{tag_id}")
+        updated_tags = PostTag(post_id=post_id, tag_id=tag_id)
+        db.session.add(updated_tags)
+        db.session.commit()
+        
     return redirect(f"/post/{post_id}")
 
 @app.route("/post/<int:post_id>/delete", methods=["POST"])
