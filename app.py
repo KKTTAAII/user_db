@@ -22,18 +22,19 @@ db.create_all()
 def list_users():
     """Shows list of all users in db"""
     users = User.query.order_by(User.first_name, User.last_name).all()
-    return render_template("home.html", users=users)
+    return render_template("/user_templates/home.html", users=users)
 
 @app.route("/homepage")
 def show_homepage():
     """Show homepage"""
-    all_posts = Post.query.order_by('created_at').limit(5)
-    return render_template("homepage.html", all_posts=all_posts)
+    all_tags = Tag.query.all()
+    all_posts = Post.query.order_by(Post.created_at.desc()).limit(5)
+    return render_template("/post_templates/home.html", all_posts=all_posts, all_tags=all_tags)
 
 @app.route("/newform")
 def form():
     """Show a new user form"""
-    return render_template("new_user_form.html")
+    return render_template("/user_templates/form.html")
 
 #Uer routes
 
@@ -57,14 +58,14 @@ def show_user(user_id):
     """Show details about a single user"""
     user = User.query.get_or_404(user_id)
     posts = Post.query.filter(Post.userid == user_id).all()
-    return render_template("user_details.html", user=user, posts=posts)
+    return render_template("/user_templates/details.html", user=user, posts=posts)
 
 
 @app.route("/user/<int:user_id>/edit")
 def edit_user(user_id):
     """Show edit page"""
     user = User.query.get_or_404(user_id)
-    return render_template("edit.html", user=user)
+    return render_template("/user_templates/edit.html", user=user)
 
 
 @app.route("/user/<int:user_id>/edit", methods=["POST"])
@@ -97,7 +98,7 @@ def show_post_form(user_id):
     """Show a new post form"""
     user = User.query.get_or_404(user_id)
     all_tags = Tag.query.all()
-    return render_template("addpost.html", user=user, all_tags=all_tags)
+    return render_template("/post_templates/form.html", user=user, all_tags=all_tags)
 
 
 @app.route("/user/<int:user_id>/posts/new", methods=["POST"])
@@ -129,14 +130,14 @@ def add_post(user_id):
 def show_post(post_id):
     """Show post per post id"""
     post = Post.query.get_or_404(post_id)
-    return render_template("post.html", post=post)
+    return render_template("/post_templates/details.html", post=post)
 
 @app.route("/post/<int:post_id>/edit")
 def edit_post(post_id):
     """Show edit page"""
     post = Post.query.get_or_404(post_id)
     all_tags = Tag.query.all()
-    return render_template("editpost.html", post=post, all_tags=all_tags)
+    return render_template("/post_templates/edit.html", post=post, all_tags=all_tags)
 
 @app.route("/post/<int:post_id>/edit", methods=["POST"])
 def update_post(post_id):
@@ -151,16 +152,12 @@ def update_post(post_id):
     db.session.commit()
 
     tag_names = request.form.getlist("tag_name")
+    db.session.query(PostTag).filter(PostTag.post_id==post_id).delete()
 
     for name in tag_names:
-        print(f"THESE ARE names *********************{name}")
         tag = Tag.query.filter_by(name=name).first()
-        print(f"########################{tag}")
         tag_id = tag.id
-        print(f"###########0000000000000000{tag_id}")
-        db.session.query(PostTag).filter(PostTag.post_id==post_id).delete()
-        db.session.commit()
-        print(f"###########0000000000000000{tag_id}")
+    
         updated_tags = PostTag(post_id=post_id, tag_id=tag_id)
         db.session.add(updated_tags)
         db.session.commit()
@@ -182,18 +179,18 @@ def delete_post(post_id):
 def list_tags():
     """Show a list of all tags"""
     all_tags = Tag.query.all()
-    return render_template("tag.html", all_tags=all_tags)
+    return render_template("/tag_templates/home.html", all_tags=all_tags)
 
 @app.route("/tags/<int:tag_id>")
 def list_tags_details(tag_id):
     """Show posts title with the tag"""
     tag = Tag.query.get_or_404(tag_id)
-    return render_template("tag_details.html", tag=tag)
+    return render_template("/tag_templates/details.html", tag=tag)
 
 @app.route("/tags/new")
 def tag_form():
     """Show a new tag form"""
-    return render_template("new_tag_form.html")
+    return render_template("/tag_templates/form.html")
 
 @app.route("/tags/new", methods=["POST"])
 def create_tag():
@@ -210,7 +207,7 @@ def create_tag():
 def tag_edit(tag_id):
     """Show tag edit page"""
     tag = Tag.query.get_or_404(tag_id)
-    return render_template("tag_edit.html", tag=tag)
+    return render_template("/tag_templates/edit.html", tag=tag)
 
 @app.route("/tags/<int:tag_id>/edit", methods=["POST"])
 def update_tag(tag_id):
