@@ -8,11 +8,13 @@ content%}
     <br />
   </div>
   <div>
-      <span>Tags: 
+    {%if post.tags%}
+      <span><span class="bold">Tags:</span> 
       {%for tag in post.tags %}
-      <a href="/tags/{{tag.id}}">{{tag.name}}</a>
+      <a class="badge badge-secondary"  href="/tags/{{tag.id}}">{{tag.name}}</a>
       {%endfor%}
     </span>
+    {%endif%}
   </div>
   <div class="btn-group mt-5">
     <form action="/">

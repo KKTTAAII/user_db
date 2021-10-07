@@ -17,7 +17,6 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
-
 @app.route("/")
 def list_users():
     """Shows list of all users in db"""
@@ -100,7 +99,6 @@ def show_post_form(user_id):
     all_tags = Tag.query.all()
     return render_template("/post_templates/form.html", user=user, all_tags=all_tags)
 
-
 @app.route("/user/<int:user_id>/posts/new", methods=["POST"])
 def add_post(user_id):
     """Add a new post"""
@@ -155,8 +153,7 @@ def update_post(post_id):
     db.session.query(PostTag).filter(PostTag.post_id==post_id).delete()
 
     for name in tag_names:
-        tag = Tag.query.filter_by(name=name).first()
-        tag_id = tag.id
+        tag_id = Tag.query.filter_by(name=name).first().id
     
         updated_tags = PostTag(post_id=post_id, tag_id=tag_id)
         db.session.add(updated_tags)

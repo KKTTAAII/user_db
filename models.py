@@ -5,16 +5,14 @@ import datetime
 
 db = SQLAlchemy()
 
-
 def connect_db(app):
     db.app = app
     db.init_app(app)
 
-
 DEFAULT_IMAGE_URL = 'https://www.icon0.com/vectors/static2/preview2/stock-photo-people-face-cartoon-icon-design-15029.jpg'
 
 class User(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = db.Column(db.Integer,
                    primary_key=True,
@@ -42,9 +40,8 @@ class User(db.Model):
         user = self
         return f"{user.first_name} {user.last_name}"
 
-
 class Post(db.Model):
-    __tablename__ = 'posts'
+    __tablename__ = "posts"
 
     id = db.Column(db.Integer,
                    primary_key=True,
@@ -60,7 +57,7 @@ class Post(db.Model):
 
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    userid = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    userid = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     post_tags = db.relationship("PostTag", backref="post", cascade="all, delete-orphan")
 
@@ -68,7 +65,7 @@ class Post(db.Model):
         return f"<Post {self.title} {self.content} {self.created_at} {self.userid}>"
 
 class Tag(db.Model):
-    __tablename__ = 'tags'
+    __tablename__ = "tags"
 
     id = db.Column(db.Integer,
                    primary_key=True,
@@ -79,19 +76,19 @@ class Tag(db.Model):
                       unique = True
                       )
 
-    posts = db.relationship('Post', secondary="post_tags", backref="tags")
+    posts = db.relationship("Post", secondary="post_tags", backref="tags")
 
     def __repr__(self):
         return f"<Tag {self.name}>"
 
 class PostTag(db.Model):
-    __tablename__ = 'post_tags'
+    __tablename__ = "post_tags"
 
     post_id = db.Column(db.Integer, db.ForeignKey(
-        'posts.id'), primary_key=True)
+        "posts.id"), primary_key=True)
 
     tag_id = db.Column(db.Integer, db.ForeignKey(
-        'tags.id'), primary_key=True)
+        "tags.id"), primary_key=True)
 
     def __repr__(self):
         return f"<PostTag {self.post_id}, {self.tag_id}>"
