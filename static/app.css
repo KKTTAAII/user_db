@@ -8,3 +8,24 @@
     width: 200px;
 }
 
+.badge {
+    background-color: rgb(60, 60, 177);
+}
+
+.title {
+    text-decoration: none;
+    color: black;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.navbar {
+    background-color: rgb(159, 189, 245);
+    border-radius: 3px;
+}
+
+.navbar-brand {
+    margin-left: 5px;
+}
