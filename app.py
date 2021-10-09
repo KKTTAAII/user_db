@@ -17,6 +17,28 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
+
+def update_info(post_id):
+    tag_names = request.form.getlist("tag_name")
+    db.session.query(PostTag).filter(PostTag.post_id==post_id).delete()
+
+    for name in tag_names:
+        tag_id = Tag.query.filter_by(name=name).first().id
+    
+        updated_tags = PostTag(post_id=post_id, tag_id=tag_id)
+        db.session.add(updated_tags)
+        db.session.commit()
+
+def get_tags(post_id):
+    tag_names = request.form.getlist("tag_name")
+
+    for name in tag_names:
+        tag = Tag.query.filter_by(name=name).first()
+        tag_id = tag.id
+        post_tags = PostTag(post_id=post_id, tag_id=tag_id)
+        db.session.add(post_tags)
+        db.session.commit()
+
 @app.route("/")
 def list_users():
     """Shows list of all users in db"""
@@ -113,14 +135,7 @@ def add_post(user_id):
     db.session.add(new_post)
     db.session.commit()
 
-    tag_names = request.form.getlist("tag_name")
-
-    for name in tag_names:
-        tag = Tag.query.filter_by(name=name).first()
-        tag_id = tag.id
-        post_tags = PostTag(post_id=new_post.id, tag_id=tag_id)
-        db.session.add(post_tags)
-        db.session.commit()
+    get_tags(new_post.id)   
 
     return redirect(f"/user/{user_id}")
 
@@ -149,15 +164,7 @@ def update_post(post_id):
     db.session.add(post)
     db.session.commit()
 
-    tag_names = request.form.getlist("tag_name")
-    db.session.query(PostTag).filter(PostTag.post_id==post_id).delete()
-
-    for name in tag_names:
-        tag_id = Tag.query.filter_by(name=name).first().id
-    
-        updated_tags = PostTag(post_id=post_id, tag_id=tag_id)
-        db.session.add(updated_tags)
-        db.session.commit()
+    update_info(post_id)
         
     return redirect(f"/post/{post_id}")
 
@@ -225,5 +232,3 @@ def delete_tag(tag_id):
     db.session.commit()
     flash("The tag has been deleted")
     return redirect("/tags")
-
-  

@@ -64,6 +64,7 @@ class Post(db.Model):
     def __repr__(self):
         return f"<Post {self.title} {self.content} {self.created_at} {self.userid}>"
 
+
 class Tag(db.Model):
     __tablename__ = "tags"
 
